@@ -1,4 +1,4 @@
-(in-package :stumpwm)
+(in-package :stumpwm-user)
 
 ;; (setf *bar-med-color* "^B^8")
 ;; (setf *bar-hi-color* "^B^3")

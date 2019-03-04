@@ -1,4 +1,4 @@
-(in-package :stumpwm)
+(in-package :stumpwm-user)
 
 (defun xorg-color-path (file)
   (concatenate 'string "~/.config/xorg/Xresources/colors/" file))
@@ -21,7 +21,6 @@
 (defcommand load-theme (theme) ()
   (let ((command-one (format nil "xrdb -merge ~A" (xresource-location theme)))
         (command-two (format nil "emacsclient -e \"(load-theme (intern ~A))\"" theme)))
-    (progn
-      (run-shell-command command-one)
-      (run-shell-command command-two)
-      theme)))
+    (run-shell-command command-one)
+    (run-shell-command command-two)
+    theme))
