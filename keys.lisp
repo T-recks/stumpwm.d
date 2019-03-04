@@ -1,8 +1,24 @@
-(in-package :stumpwm)
+(in-package :stumpwm-user)
+
+(defmacro def-keys (map &body key-pairs)
+  (let ((definitions
+          (mapcar (lambda (x) (list 'define-key map (list 'kbd (first x)) (second x)))
+                  key-pairs)))
+    `(progn ,@definitions)))
+
+;; Read some doc
+(define-key *root-map* (kbd "d") "exec zathura")
+;; Browse somewhere
+;; (define-key *root-map* (kbd "b") "colon1 exec qutebrowser http://www.")
+;; Ssh somewhere
+(define-key *root-map* (kbd "C-s") "colon1 exec urxvt -e ssh ")
+;; Lock screen
+;; (define-key *root-map* (kbd "C-l") "exec xlock")
 
 ;; toggle languages
-(define-key *top-map* (kbd "F12") "lang-menu")
-(define-key *top-map* (kbd "F11") "english")
+(def-keys *top-map*
+  ("F12" "lang-menu")
+  ("F11" "english"))
 
 ;; terminal setup var and functio setup for use in this config file
 (defvar *terminal* "urxvt")
@@ -17,8 +33,22 @@
 ;; emacs
 (undefine-key *root-map* (kbd "C-e"))
 (undefine-key *root-map* (kbd "e"))
-(define-key *root-map* (kbd "C-e") "emacs-connect")
-(define-key *root-map* (kbd "e") "exec emacsclient -c")
+;; (define-key *root-map* (kbd "C-e") "emacs-connect")
+;; (define-key *root-map* (kbd "e") "exec emacsclient -c")
+(def-keys *root-map*
+  ("C-e" "emacs-connect")
+  ("e" "exec emacsclient -c"))
+
+;; banish
+(define-key *root-map* (kbd "b") "banish")
+
+;; raise
+(def-keys *root-map*
+  ("C-b" "raise-qutebrowser")
+  ("C-f" "raise-firefox")
+  ("C-d" "raise-zathura")
+  ("C-t" "raise-tor")
+  ("C-x" "raise-calc"))
 
 ;; dmenu
 (define-key *root-map* (kbd "space") "exec dmenu_run")
@@ -28,18 +58,19 @@
 ;; swapping defaults
 (undefine-key *root-map* (kbd "s"))
 (undefine-key *root-map* (kbd "S"))
-(define-key *root-map* (kbd "s") "hsplit")
-(define-key *root-map* (kbd "S") "vsplit")
 (undefine-key *root-map* (kbd "'"))
 (undefine-key *root-map* (kbd "\""))
-(define-key *root-map* (kbd "'") "windowlist-by-class")
-(define-key *root-map* (kbd "\"") "global-windowlist")
-(define-key *groups-map* (kbd "'") "grouplist")
-(define-key *groups-map* (kbd "\"") "gselect")
 ;; (undefine-key *root-map* (kbd "r"))
 ;; (undefine-key *root-map* (kbd "R"))
-(define-key *root-map* (kbd "r") "remove")
-(define-key *root-map* (kbd "R") "iresize")
+(def-keys *root-map*
+  ("s" "hsplit")
+  ("S" "vsplit")
+  ("'" "windowlist-by-class")
+  ("\"" "global-windowlist")
+  ("'" "grouplist")
+  ("\"" "gselect")
+  ("r" "remove")
+  ("R" "iresize"))
 
 ;; duplicating defaults
 (define-key *root-map* (kbd "q") "only")
@@ -50,48 +81,52 @@
 (undefine-key *root-map* (kbd "C-l"))
 (undefine-key *root-map* (kbd "C-h"))
 (undefine-key *root-map* (kbd "C-k"))
-(define-key *root-map* (kbd "C-h") "move-focus left")
-(define-key *root-map* (kbd "C-j") "move-focus down")
-(define-key *root-map* (kbd "C-k") "move-focus up")
-(define-key *root-map* (kbd "C-l") "move-focus right")
-;; more frame movement
-(define-key *root-map* (kbd "(") "exchange-direction left")
-(define-key *root-map* (kbd ")") "exchange-direction right")
-
-;; misc window management
-(define-key *root-map* (kbd "P") "pull-from-windowlist")
+(def-keys *root-map*
+  ;; vim navigation
+  ("C-h" "move-focus left")
+  ("C-j" "move-focus down")
+  ("C-k" "move-focus up")
+  ("C-l" "move-focus right")
+  ;; more frame movement
+  ("(" "exchange-direction left")
+  (")" "exchange-direction right")
+  ;; misc window management
+  ("P" "pull-from-windowlist"))
 
 ;; some control commands
-(define-key *top-map* (kbd "XF86ScreenSaver") "run-shell-command bash ~/.config/i3/scripts/lock/lock.sh")
-(define-key *top-map* (kbd "XF86MonBrightnessDown") "run-shell-command xbacklight -dec 5")
-(define-key *top-map* (kbd "XF86MonBrightnessUp") "run-shell-command xbacklight -inc 5")
-(define-key *top-map* (kbd "XF86AudioLowerVolume") "run-shell-command amixer -q sset Master,0 1- unmute")
-(define-key *top-map* (kbd "XF86AudioRaiseVolume") "run-shell-command amixer -q sset Master,0 1+ unmute")
-(define-key *top-map* (kbd "XF86AudioMute") "run-shell-command amixer -q sset Master,0 toggle")
-(define-key *top-map* (kbd "XF86AudioPlay") "run-shell-command mpc toggle")
-(define-key *top-map* (kbd "XF86AudioNext") "run-shell-command mpc next")
-(define-key *top-map* (kbd "XF86AudioPrev") "run-shell-command mpc prev")
-(define-key *top-map* (kbd "XF86AudioStop") "run-shell-command mpc stop")
+(def-keys *top-map*
+  ("XF86ScreenSaver" "run-shell-command bash ~/.config/i3/scripts/lock/lock.sh")
+  ("XF86MonBrightnessDown" "run-shell-command xbacklight -dec 5")
+  ("XF86MonBrightnessUp" "run-shell-command xbacklight -inc 5")
+  ("XF86AudioLowerVolume" "run-shell-command amixer -q sset Master,0 1- unmute")
+  ("XF86AudioRaiseVolume" "run-shell-command amixer -q sset Master,0 1+ unmute")
+  ("XF86AudioMute" "run-shell-command amixer -q sset Master,0 toggle")
+  ("XF86AudioPlay" "run-shell-command mpc toggle")
+  ("XF86AudioNext" "run-shell-command mpc next")
+  ("XF86AudioPrev" "run-shell-command mpc prev")
+  ("XF86AudioStop" "run-shell-command mpc stop"))
 
 ;; launch mode
 (defvar *launch-map* nil)
 (setf *launch-map*
-  (let ((c (make-sparse-keymap)))
-    (define-key c (kbd "b") "exec qutebrowser")
-    (define-key c (kbd "f") "exec firefox")
-    (define-key c (kbd "F") "exec firefox --private-window")
-    ;; (define-key c (kbd "e") "exec emacsclient -ca \"\"")
-    (define-key c (kbd "m") "exec-terminal ncmpcpp")
-	(define-key c (kbd "M") "exec thunderbird")
-	(define-key c (kbd "n") "exec-terminal newsboat")
-	(define-key c (kbd "N") "exec-terminal neofetch")
-    (define-key c (kbd "i") "exec-terminal htop")
-    (define-key c (kbd "r") "exec-terminal ranger")
-    ;; (define-key c (kbd "m") "exec emacsclient -c -e '(unread-mail)'")
-    ;; (define-key c (kbd "r") "exec redshift")
-    ;; (define-key c (kbd "R") "exec killall redshift")
-	(define-key c (kbd "x") "app-menu")
-    (define-key c (kbd "s") "sys-menu")
-    c))
+      (let ((k (make-sparse-keymap)))
+        (def-keys k
+          ("b" "exec qutebrowser")
+          ("d" "exec zathura")
+          ("f" "exec firefox")
+          ("F" "exec firefox --private-window")
+          ;; ("e" "exec emacsclient -ca \"\"")
+          ("m" "exec-terminal ncmpcpp")
+	      ("M" "exec thunderbird")
+	      ("n" "exec-terminal newsboat")
+	      ("N" "exec-terminal neofetch")
+          ("i" "exec-terminal htop")
+          ("r" "exec-terminal ranger")
+          ;; ("m" "exec emacsclient -c -e '(unread-mail)'")
+          ;; ("r" "exec redshift")
+          ;; ("R" "exec killall redshift")
+	      ("x" "app-menu")
+          ("s" "sys-menu"))
+        k))
 
 (define-key *root-map* (kbd "x") '*launch-map*)
