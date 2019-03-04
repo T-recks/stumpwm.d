@@ -1,6 +1,7 @@
 ;; -*-lisp-*-
 ;;
-(in-package :stumpwm)
+(use-package :stumpwm)
+(in-package :stumpwm-user)
 
 ;; var for loading config files
 (defvar *confdir* "~/.stumpwm.d")
@@ -10,7 +11,9 @@
   (load (conf-file filename)))
 
 ;; swank setup
-(load-conf-file "swank-setup.lisp")
+(defcommand load-swank () ()
+  (load-conf-file "swank-setup.lisp"))
+(load-swank)
 
 ;; fonts
 (require :clx-truetype)
@@ -33,14 +36,28 @@
 (load-conf-file "mymenu.lisp")
 ;;(load-conf-file "theme.lisp")
 (load-conf-file "keys.lisp")
+(load-conf-file "st.lisp")
+;; other files
+(load "~/acc.lisp")
+(load "~/Study/units.lisp")
 
 ;; change the prefix key to something else
 (set-prefix-key (kbd "C-z"))
 
-;; emacs
+;; run-or-raise
 (defcommand emacs-connect () ()
   "Identical to emacs function except it runs emacsclient -c"
   (run-or-raise "emacsclient -c" '(:class "Emacs")))
+(defcommand raise-qutebrowser () ()
+  (run-or-raise "qutebrowser" '(:class "qutebrowser")))
+(defcommand raise-firefox () ()
+  (run-or-raise "firefox" '(:class "Firefox")))
+(defcommand raise-zathura () ()
+  (run-or-raise "zathura" '(:class "Zathura")))
+(defcommand raise-tor () ()
+  (run-or-raise "tor-browser" '(:class "Tor Browser")))
+(defcommand raise-calc () ()
+  (run-or-raise "libreoffice" '(:class "libreoffice-calc")))
 
 ;; activate mode-line
 (enable-mode-line (current-screen) (current-head) t)
@@ -66,15 +83,6 @@
     (when cmd
       (eval-command cmd t))))
 
-;; Read some doc
-(define-key *root-map* (kbd "d") "exec zathura")
-;; Browse somewhere
-(define-key *root-map* (kbd "b") "colon1 exec qutebrowser http://www.")
-;; Ssh somewhere
-(define-key *root-map* (kbd "C-s") "colon1 exec urxvt -e ssh ")
-;; Lock screen
-;; (define-key *root-map* (kbd "C-l") "exec xlock")
-
 ;; Web jump (works for Google and Imdb)
 (defmacro make-web-jump (name prefix)
   `(defcommand ,(intern name) (search) ((:rest ,(concatenate 'string name " search: ")))
@@ -84,7 +92,7 @@
 (make-web-jump "google" "qutebrowser http://www.google.fr/search?q=")
 
 ;; C-t M-s is a terrble binding, but you get the idea.
-(define-key *root-map* (kbd "M-s") "google")
+;; (define-key *root-map* (kbd "M-s") "google")
 
 ;;; Define window placement policy...
 
