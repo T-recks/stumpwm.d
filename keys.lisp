@@ -1,6 +1,7 @@
 (in-package :stumpwm-user)
 
 (defmacro def-keys (map &body key-pairs)
+  "KEY-PAIRS are of the form (string symbol) where STRING contains the key combination and SYMBOL is the function to call."
   (let ((definitions
           (mapcar (lambda (x) (list 'define-key map (list 'kbd (first x)) (second x)))
                   key-pairs)))
@@ -67,8 +68,6 @@
   ("S" "vsplit")
   ("'" "windowlist-by-class")
   ("\"" "global-windowlist")
-  ("'" "grouplist")
-  ("\"" "gselect")
   ("r" "remove")
   ("R" "iresize"))
 
