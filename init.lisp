@@ -16,27 +16,30 @@
 (load-swank)
 
 ;; fonts
-(require :clx-truetype)
-(load-module "ttf-fonts")
-(set-font (make-instance 'xft:font :family "DejaVu Sans Mono" :subfamily "Book" :size 11))
+(set-font '("-windows-dina-medium-r-normal--13-100-96-96-c-80-iso8859-1" "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso10646-1"))
 
 ;; other modules
-(load-module "globalwindows")
-(load-module "battery-portable")
-(load-module "cpu")
-;; (load-module "mem")
-;; (load-module "command-history")
-(load-module "clipboard-history")
+(mapc #'load-module
+      '("globalwindows"
+        "battery-portable"
+        "cpu"
+        "clipboard-history"
+        ;; "mem"
+        ;; "command-history"
+        ))
+
 ;; start the polling timer process
 (clipboard-history:start-clipboard-manager)
 
 ;; config files to load
-(load-conf-file "modeline.lisp")
-(load-conf-file "lang.lisp")
-(load-conf-file "mymenu.lisp")
-;;(load-conf-file "theme.lisp")
-(load-conf-file "keys.lisp")
-(load-conf-file "st.lisp")
+(mapc #'load-conf-file
+      '("modeline.lisp"
+        "lang.lisp"
+        "mymenu.lisp"
+        ;; "theme.lisp"
+        "keys.lisp"
+        "st.lisp"))
+
 ;; other files
 (load "~/acc.lisp")
 (load "~/Study/units.lisp")
@@ -67,7 +70,7 @@
 
 ;; toggle heads
 (defcommand toggle-heads () ()
-  (let ((attached-monitors (- (length (group-heads (current-group))) 1)))
+  (let ((attached-monitors (- (length (stumpwm::group-heads (current-group))) 1)))
     (if (equal attached-monitors 1)
         (progn
           (run-shell-command "xrandr --output VGA1 --off")
