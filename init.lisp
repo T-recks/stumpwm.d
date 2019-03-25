@@ -10,15 +10,15 @@
 (defun load-conf-file (filename)
   (load (conf-file filename)))
 
-;; swank setup
+;; Swank Setup
 (defcommand load-swank () ()
   (load-conf-file "swank-setup.lisp"))
 (load-swank)
 
-;; fonts
-(set-font '("-windows-dina-medium-r-normal--13-100-96-96-c-80-iso8859-1" "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso10646-1"))
+;; Fonts
+(set-font '("-windows-dina-medium-r-normal--13-100-96-96-c-80-iso8859-1"))
 
-;; other modules
+;; Contribe Modules
 (mapc #'load-module
       '("globalwindows"
         "battery-portable"
@@ -31,23 +31,26 @@
 ;; start the polling timer process
 (clipboard-history:start-clipboard-manager)
 
-;; config files to load
+;; Config Files
 (mapc #'load-conf-file
       '("modeline.lisp"
         "lang.lisp"
         "mymenu.lisp"
         ;; "theme.lisp"
         "keys.lisp"
-        "st.lisp"))
+        "st.lisp"
+        "placement.lisp"
+        ))
 
-;; other files
+;; Utility Files
 (load "~/acc.lisp")
 (load "~/Study/units.lisp")
 
-;; change the prefix key to something else
+;; Prefix Key
 (set-prefix-key (kbd "C-z"))
 
-;; run-or-raise
+;; Run-or-raise
+;; TODO: make this concise.
 (defcommand emacs-connect () ()
   "Identical to emacs function except it runs emacsclient -c"
   (run-or-raise "emacsclient -c" '(:class "Emacs")))
@@ -62,13 +65,13 @@
 (defcommand raise-calc () ()
   (run-or-raise "libreoffice" '(:class "libreoffice-calc")))
 
-;; activate mode-line
+;; Activate mode-line
 (enable-mode-line (current-screen) (current-head) t)
 
-;; message settings
+;; Message Padding
 (setf *message-window-padding* 25)
 
-;; toggle heads
+;; Toggle Heads
 (defcommand toggle-heads () ()
   (let ((attached-monitors (- (length (stumpwm::group-heads (current-group))) 1)))
     (if (equal attached-monitors 1)
@@ -96,49 +99,6 @@
 
 ;; C-t M-s is a terrble binding, but you get the idea.
 ;; (define-key *root-map* (kbd "M-s") "google")
-
-;;; Define window placement policy...
-
-;; Clear rules
-(clear-window-placement-rules)
-
-;; Last rule to match takes precedence!
-;; TIP: if the argument to :title or :role begins with an ellipsis, a substring
-;; match is performed.
-;; TIP: if the :create flag is set then a missing group will be created and
-;; restored from *data-dir*/create file.
-;; TIP: if the :restore flag is set then group dump is restored even for an
-;; existing group using *data-dir*/restore file.
-(define-frame-preference "Default"
-  ;; frame raise lock (lock AND raise == jumpto)
-  (0 t nil :class "Konqueror" :role "...konqueror-mainwindow")
-  (1 t nil :class "XTerm"))
-
-(define-frame-preference "Ardour"
-  (0 t   t   :instance "ardour_editor" :type :normal)
-  (0 t   t   :title "Ardour - Session Control")
-  (0 nil nil :class "XTerm")
-  (1 t   nil :type :normal)
-  (1 t   t   :instance "ardour_mixer")
-  (2 t   t   :instance "jvmetro")
-  (1 t   t   :instance "qjackctl")
-  (3 t   t   :instance "qjackctl" :role "qjackctlMainForm"))
-
-(define-frame-preference "Shareland"
-  (0 t   nil :class "XTerm")
-  (1 nil t   :class "aMule"))
-
-;; (define-frame-preference "Emacs"
-  ;; (1 t t :restore "emacs-editing-dump" :title "...xdvi")
-  ;; (2 t t :create "emacs-dump" :class "Emacs"))
-
-;; (define-frame-preference "Browse"
-  ;; (2 t t :create t :class "qutebrowser")
-  ;; (2 t t :create t :class "Waterfox"))
-
-(define-frame-preference "Mail"
-  (0 t t :create t :instance "Mail")
-  (0 t t :create t :instance "claws-mail"))
 
 (defcommand now-playing () ()
   (message "~A" (run-shell-command "mpc --format \"[[%artist% - ]%title%]\"| head -1" T)))
