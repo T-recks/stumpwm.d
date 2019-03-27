@@ -3,10 +3,12 @@
 (use-package :stumpwm)
 (in-package :stumpwm-user)
 
-;; var for loading config files
+;; Config Loading
 (defvar *confdir* "~/.stumpwm.d")
+
 (defun conf-file (filename)
   (format nil "~A/~A" *confdir* filename))
+
 (defun load-conf-file (filename)
   (load (conf-file filename)))
 
@@ -65,13 +67,10 @@
 (defcommand raise-calc () ()
   (run-or-raise "libreoffice" '(:class "libreoffice-calc")))
 
-;; Activate mode-line
-(enable-mode-line (current-screen) (current-head) t)
-
 ;; Message Padding
 (setf *message-window-padding* 25)
 
-;; Toggle Heads
+;; Misc Commands
 (defcommand toggle-heads () ()
   (let ((attached-monitors (- (length (stumpwm::group-heads (current-group))) 1)))
     (if (equal attached-monitors 1)
@@ -82,23 +81,17 @@
           (run-shell-command "xrandr --output VGA1 --left-of LVDS1 --auto")
           (refresh-heads)))))
 
-;; prompt the user for an interactive command. The first arg is an
-;; optional initial contents.
 (defcommand colon1 (&optional (initial "")) (:rest)
   (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
     (when cmd
       (eval-command cmd t))))
 
-;; Web Jump 
 (defmacro make-web-jump (name prefix)
   `(defcommand ,(intern name) (search) ((:rest ,(concatenate 'string name " search: ")))
     (substitute #\+ #\Space search)
     (run-shell-command (concatenate 'string ,prefix search))))
 
 (make-web-jump "google" "qutebrowser http://www.google.fr/search?q=")
-
-;; C-t M-s is a terrble binding, but you get the idea.
-;; (define-key *root-map* (kbd "M-s") "google")
 
 (defcommand now-playing () ()
   (message "~A" (run-shell-command "mpc --format \"[[%artist% - ]%title%]\"| head -1" T)))

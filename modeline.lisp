@@ -1,5 +1,7 @@
 (in-package :stumpwm-user)
 
+;; TODO: cleanup comments
+
 ;; (setf *bar-med-color* "^B^8")
 ;; (setf *bar-hi-color* "^B^3")
 ;; (setf *bar-crit-color* "^B^1")
@@ -17,7 +19,6 @@
 ;;        "#009696"))
 ;; (update-color-map (current-screen))
 
-
 (setf *group-format* " %n %t ")
 (setf *window-format* "%m%n %50t ")
 ;; (setf *time-modeline-string* "^9 • %e, %a^n^B %l:%M ^b")
@@ -34,7 +35,8 @@
 ;; 			'(:eval (stumpwm:run-shell-command "date" t))
 ;; 			))
 
-
 (setf *mode-line-border-width* 0)
 ;;(setf *mode-line-background-color* "#000809")
 ;;(setf *mode-line-foreground-color* "DeepSkyBlue")
+
+(enable-mode-line (current-screen) (current-head) t)

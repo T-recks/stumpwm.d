@@ -1,5 +1,7 @@
 (in-package :stumpwm-user)
 
+;; TODO: organize and clean
+
 (defmacro def-keys (map &body key-pairs)
   "KEY-PAIRS are of the form (string symbol) where STRING contains the key combination and SYMBOL is the function to call."
   (let ((definitions
@@ -7,7 +9,6 @@
                   key-pairs)))
     `(progn ,@definitions)))
 
-;; Read some doc
 (define-key *root-map* (kbd "d") "exec zathura")
 ;; Browse somewhere
 ;; (define-key *root-map* (kbd "b") "colon1 exec qutebrowser http://www.")
@@ -21,7 +22,7 @@
   ("F12" "lang-menu")
   ("F11" "english"))
 
-;; terminal setup var and functio setup for use in this config file
+;; terminal setup var and function setup for use in this config file
 (defvar *terminal* "urxvt")
 (defcommand exec-terminal (cmd) (:string)
   (run-commands (format nil "exec ~A -e ~A" *terminal* cmd)))
