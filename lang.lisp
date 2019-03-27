@@ -6,13 +6,15 @@
 (defcommand xmodmap () ()
   (run-shell-command "xmodmap ~/.Xmodmap"))
 
-(defcommand english () ()
-  (setxkbmap "us")
-  (xmodmap)
-  (setf *current-lang* "us"))
-(defcommand greek () ()
-  (setxkbmap "gr")
-  (setf *current-lang* "gr"))
-(defcommand german () ()
-  (setxkbmap "de")
-  (setf *current-lang* "de"))
+(defmacro def-lang-kbmap ((name kbmap) &body forms)
+  `(defcommand ,name () ()
+     (setxkbmap ,kbmap)
+     ,@forms
+     (setf *current-lang* ,kbmap)))
+
+(def-lang-kbmap (english "us")
+  (xmodmap))
+
+(def-lang-kbmap (greek "gr"))
+
+(def-lang-kbmap (german "de"))
