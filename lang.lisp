@@ -16,13 +16,3 @@
 (defcommand german () ()
   (setxkbmap "de")
   (setf *current-lang* "de"))
-
-(defcommand toggle-lang () ()
-  (if (equal *current-lang* "us")
-      (progn
-        (setxkbmap "de")
-        (setf *current-lang* "de"))
-      (progn
-        (setxkbmap "us")
-        (xmodmap)
-        (setf *current-lang* "us"))))
