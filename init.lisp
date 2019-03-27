@@ -16,7 +16,7 @@
 (load-swank)
 
 ;; Fonts
-(set-font '("-windows-dina-medium-r-normal--13-100-96-96-c-80-iso8859-1"))
+(set-font "-windows-dina-medium-r-normal--13-100-96-96-c-80-iso8859-1")
 
 ;; Contribe Modules
 (mapc #'load-module
@@ -89,7 +89,7 @@
     (when cmd
       (eval-command cmd t))))
 
-;; Web jump (works for Google and Imdb)
+;; Web Jump 
 (defmacro make-web-jump (name prefix)
   `(defcommand ,(intern name) (search) ((:rest ,(concatenate 'string name " search: ")))
     (substitute #\+ #\Space search)
