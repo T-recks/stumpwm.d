@@ -1,5 +1,7 @@
 (in-package :stumpwm-user)
 
+;; TODO: make this shit work properly
+
 (with-restarts-menu
     (load "~/.emacs.d/elpa/slime-20190210.1101/swank-loader.lisp"))
 (with-restarts-menu
@@ -13,7 +15,6 @@
         (message "Starting swank on localhost:4004.")
         (defparameter *server-running* t))))
 
-;; TODO fix
 (defcommand swank-stop () ()
   (if (and (boundp '*server-running*) *server-running*)
       (progn
@@ -39,5 +40,3 @@
 (unless (boundp '*server-running*)
   (swank-start))
 
-(defcommand bar () ()
-  (message "this is bar"))
