@@ -1,37 +1,3 @@
-(defparameter *app-menu* '(("urxvt" "urxvt")
-                           ("Internet"
-                            ("Firefox" "firefox")
-                            ("Qutebrowser" "qutebrowser"))
-                           ("Graphics"
-                            ("GIMP" "gimp"))
-                           ("Mathematics"
-                            ("Maxima" "wxmaxima"))
-                           ("Office Applications"
-                            ("Emacs" "emacs")
-                            ("Libre Office" "libreoffice"))
-                           ("Tools"
-                            ("VirtualBox" "VirtualBox"))))
-
-(defparameter *sys-menu* '(("Toggle Heads" nil (toggle-heads))
-                           ("Shutdown" "shutdown now")
-                           ("Reboot" "reboot")
-                           ("Kill Xorg" "pkill x")))
-
-(defparameter *lang-menu* '(("Greek" nil (greek))
-                            ("English" nil (english))
-                            ("German" nil (german))))
-
-(defparameter *bin-menu*
-  (with-open-file (file "~/.stumpwm.d/bin.lisp")
-    (mapcar #'pathname-name (read file))))
-
-(defun write-bin (&optional (filename "bin.lisp"))
-  "Fetch all programs in /usr/bin/ and wite them as a list to FILENAME."
-  (with-open-file (file filename :direction :output :if-exists :overwrite :if-does-not-exist :create)
-    (let ((programs (directory "/usr/bin/*")))
-      (print programs file)
-      (format nil "Wrote programs to ~a." filename))))
-
 (defun pick (options)
   (let ((selection (stumpwm::select-from-menu (current-screen) options "")))
     (cond ((null selection)
@@ -55,15 +21,46 @@
                  (eval sexp)
                  (run-shell-command shell-command)))))))
 
-;; function for generating an application menu
-(defcommand app-menu () ()
-  (my-menu *app-menu*))
+(defmacro defmenu ((command var) &body menu-entries)
+  `(progn
+     (defparameter ,var ',@menu-entries)
+     (defcommand ,command () ()
+       (my-menu ,var))))
 
-(defcommand sys-menu () ()
-  (my-menu *sys-menu*))
+(defmenu (app-menu *app-menu*)
+  (("urxvt" "urxvt")
+   ("Internet"
+    ("Firefox" "firefox")
+    ("Qutebrowser" "qutebrowser"))
+   ("Graphics"
+    ("GIMP" "gimp"))
+   ("Mathematics"
+    ("Maxima" "wxmaxima"))
+   ("Office Applications"
+    ("Emacs" "emacs")
+    ("Libre Office" "libreoffice"))
+   ("Tools"
+    ("VirtualBox" "VirtualBox"))))
 
-(defcommand lang-menu () ()
-  (my-menu *lang-menu*))
+(defmenu (sys-menu *sys-menu*)
+  (("Toggle Heads" nil (toggle-heads))
+   ("Shutdown" "shutdown now")
+   ("Reboot" "reboot")
+   ("Kill Xorg" "pkill x")))
 
-(defcommand program-menu () ()
-  (my-menu *bin-menu*))
+(defmenu (lang-menu *lang-menu*)
+  (("Greek" nil (greek))
+   ("English" nil (english))
+   ("German" nil (german))))
+
+;;; TODO: make this useful
+;; (defparameter *bin-menu*
+;;   (with-open-file (file "~/.stumpwm.d/bin.lisp")
+;;     (mapcar #'pathname-name (read file))))
+
+;; (defun write-bin (&optional (filename "bin.lisp"))
+;;   "Fetch all programs in /usr/bin/ and wite them as a list to FILENAME."
+;;   (with-open-file (file filename :direction :output :if-exists :overwrite :if-does-not-exist :create)
+;;     (let ((programs (directory "/usr/bin/*")))
+;;       (print programs file)
+;;       (format nil "Wrote programs to ~a." filename))))
