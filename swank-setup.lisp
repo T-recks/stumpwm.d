@@ -3,7 +3,7 @@
 ;; TODO: make this shit work properly
 
 (with-restarts-menu
-    (load "~/.emacs.d/elpa/slime-20190210.1101/swank-loader.lisp"))
+    (load "~/.emacs.d/elpa/slime-20190319.930/swank-loader.lisp"))
 (with-restarts-menu
     (swank-loader:init))
 

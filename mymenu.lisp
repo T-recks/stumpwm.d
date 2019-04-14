@@ -2,7 +2,7 @@
   (let ((selection (stumpwm::select-from-menu (current-screen) options "")))
     (cond ((null selection)
            (throw 'stumpwm::error "Abort."))
-          ((stringp selection)
+          ((stringp selection) 
            selection)
           (t (let ((shell-command (second selection)))
                (cond ((or (stringp shell-command)
