@@ -14,32 +14,41 @@
 ;; (define-key *root-map* (kbd "b") "colon1 exec qutebrowser http://www.")
 ;; Ssh somewhere
 (define-key *root-map* (kbd "C-s") "colon1 exec urxvt -e ssh ")
-;; Lock screen
-;; (define-key *root-map* (kbd "C-l") "exec xlock")
 
-;; toggle languages
-(def-keys *top-map*
-  ("F12" "lang-menu")
-  ("F11" "english"))
+;;;;;;;;;;;;;;;
+;; key-modes ;;
+;;;;;;;;;;;;;;;
+(defcommand music-mode () ()
+  (define-key *top-map* (kbd "F12") "print-random-note")
+  (undefine-key *top-map* (kbd "F11")))
+
+(defcommand language-mode () ()
+  ;; toggle languages
+  (def-keys *top-map*
+    ("F12" "lang-menu")
+    ("F11" "english")))
+;; end key-modes
+
+(eval-during-startup (language-mode))
 
 ;; terminal setup var and function setup for use in this config file
 (defvar *terminal* "urxvt")
 (defcommand exec-terminal (cmd) (:string)
   (run-commands (format nil "exec ~A -e ~A" *terminal* cmd)))
 ;; terminal binding
-(define-key *root-map* (kbd "RET") "exec emacsclient -c -e \"(ansi-term my-term-shell)\"")
+(define-key *root-map* (kbd "RET") "emacs -e \"(ansi-term my-term-shell)\"")
 ;; remove unused bindings
 (define-key *root-map* (kbd "c") nil)
 (undefine-key *root-map* (kbd "C-c"))
 
 ;; emacs
-(undefine-key *root-map* (kbd "C-e"))
-(undefine-key *root-map* (kbd "e"))
+;; (undefine-key *root-map* (kbd "C-e"))
+;; (undefine-key *root-map* (kbd "e"))
 ;; (define-key *root-map* (kbd "C-e") "emacs-connect")
 ;; (define-key *root-map* (kbd "e") "exec emacsclient -c")
-(def-keys *root-map*
-  ("C-e" "emacs-connect")
-  ("e" "exec emacsclient -c"))
+;; (def-keys *root-map*
+;;   ("C-e" "emacs-connect")
+;;   ("e" "exec emacsclient -c"))
 
 ;; banish
 (define-key *root-map* (kbd "b") "banish")
@@ -62,8 +71,6 @@
 (undefine-key *root-map* (kbd "S"))
 (undefine-key *root-map* (kbd "'"))
 (undefine-key *root-map* (kbd "\""))
-;; (undefine-key *root-map* (kbd "r"))
-;; (undefine-key *root-map* (kbd "R"))
 (def-keys *root-map*
   ("s" "hsplit")
   ("S" "vsplit")
@@ -98,8 +105,8 @@
   ("XF86ScreenSaver" "run-shell-command bash ~/.config/i3/scripts/lock/lock.sh")
   ("XF86MonBrightnessDown" "run-shell-command xbacklight -dec 5")
   ("XF86MonBrightnessUp" "run-shell-command xbacklight -inc 5")
-  ("XF86AudioLowerVolume" "run-shell-command amixer -q sset Master,0 1- unmute")
-  ("XF86AudioRaiseVolume" "run-shell-command amixer -q sset Master,0 1+ unmute")
+  ("XF86AudioLowerVolume" "run-shell-command pactl set-sink-volume 0 -5%")
+  ("XF86AudioRaiseVolume" "run-shell-command pactl set-sink-volume 0 +5%")
   ("XF86AudioMute" "run-shell-command amixer -q sset Master,0 toggle")
   ("XF86AudioPlay" "run-shell-command mpc toggle")
   ("XF86AudioNext" "run-shell-command mpc next")
@@ -114,7 +121,6 @@
       ("d" "exec zathura")
       ("f" "exec firefox")
       ("F" "exec firefox --private-window")
-      ;; ("e" "exec emacsclient -ca \"\"")
       ("m" "exec-terminal ncmpcpp")
       ("M" "exec thunderbird")
       ("n" "exec-terminal newsboat")
