@@ -46,6 +46,7 @@
   (("Toggle Heads" nil (toggle-heads))
    ("Shutdown" "shutdown now")
    ("Reboot" "reboot")
+   ("Restart" "reboot")
    ("Kill Xorg" "pkill x")))
 
 (defmenu (lang-menu *lang-menu*)

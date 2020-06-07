@@ -1,11 +1,8 @@
 (in-package :stumpwm-user)
 
-;; TODO: make this shit work properly
+(load "~/.emacs.d/elpa/slime-20200530.1629/swank-loader.lisp")
 
-(with-restarts-menu
-    (load "~/.emacs.d/elpa/slime-20190319.930/swank-loader.lisp"))
-(with-restarts-menu
-    (swank-loader:init))
+(swank-loader:init)
 
 (defcommand swank-start () ()
   (if (and (boundp '*server-running*) *server-running*)
@@ -39,4 +36,3 @@
 
 (unless (boundp '*server-running*)
   (swank-start))
-
