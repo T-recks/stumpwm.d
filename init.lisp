@@ -11,11 +11,11 @@
 (defun conf-file (filename)
   (format nil "~A/~A" *confdir* filename))
 
-(defun safe-load (filename)
+(defun restarts-load (filename)
   (with-restarts-menu (load filename)))
 
 (defun load-conf-file (filename)
-  (safe-load (conf-file filename)))
+  (restarts-load (conf-file filename)))
 
 ;; Fonts
 (set-font "-windows-dina-medium-r-normal--13-100-96-96-c-80-iso8859-1")
