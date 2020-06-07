@@ -17,11 +17,6 @@
 (defun load-conf-file (filename)
   (safe-load (conf-file filename)))
 
-;; Swank Setup
-(defcommand load-swank () ()
-  (load-conf-file "swank-setup.lisp"))
-(load-swank)
-
 ;; Fonts
 (set-font "-windows-dina-medium-r-normal--13-100-96-96-c-80-iso8859-1")
 
