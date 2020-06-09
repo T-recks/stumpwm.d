@@ -2,14 +2,13 @@
 
 ;; TODO: organize and clean
 
-(defmacro def-keys (map &body key-pairs)
+(defmacro def-keys (keymap &body key-pairs)
   "KEY-PAIRS are of the form (string symbol) where STRING contains the key combination and SYMBOL is the function to call."
   (let ((definitions
-          (mapcar (lambda (x) (list 'define-key map (list 'kbd (first x)) (second x)))
+          (mapcar (lambda (x) (list 'define-key keymap (list 'kbd (first x)) (second x)))
                   key-pairs)))
     `(progn ,@definitions)))
 
-(define-key *root-map* (kbd "d") "exec zathura")
 ;; Browse somewhere
 ;; (define-key *root-map* (kbd "b") "colon1 exec qutebrowser http://www.")
 ;; Ssh somewhere
@@ -53,18 +52,48 @@
 ;; banish
 (define-key *root-map* (kbd "b") "banish")
 
-;; raise
-(def-keys *root-map*
-  ("C-b" "raise-qutebrowser")
-  ("C-f" "raise-firefox")
-  ("C-d" "raise-zathura")
-  ("C-t" "raise-tor")
-  ("C-x" "raise-calc"))
+;;;;;;;;;;;;;;;;;;;;;
+;; Window Creation ;;
+;;;;;;;;;;;;;;;;;;;;;
+(defparameter *window-specifications-list*
+  '((emacs "emacs" (:class "Emacs"))
+    (firefox "firefox" (:class "firefox"))
+    (qutebrowser "qutebrowser" (:class "qutebrowser"))
+    (zathura "zathura" (:class "Zathura"))
+    (tor "tor" (:class "Tor Browser" :command "tor-browser"))
+    (libreoffice "libreoffice" (:instance "libreoffice"))
+    (htop "htop" (:class "URxvt" :title "htop" :command "exec-terminal htop"))))
 
-;; dmenu
-(define-key *root-map* (kbd "space") "exec dmenu_run")
-;; clipboard
-(define-key *root-map* (kbd "C-y") "show-clipboard-history")
+(mapc (lambda (spec) (apply #'register-window-specification spec))
+      *window-specifications-list*)
+
+(def-quick-access-keys 
+  '(("e" "emacs")
+    ("f" "firefox")
+    ("d" "zathura")
+    ("b" "qutebrowser")
+    ("t" "tor")
+    ("o" "libreoffice")))
+
+;; launch mode
+(defparameter *launch-map* 
+  (let ((k (make-sparse-keymap)))
+    (def-keys k
+      ("F" "exec firefox --private-window")
+      ("m" "exec-terminal ncmpcpp")
+      ("M" "exec thunderbird")
+      ("n" "exec-terminal newsboat")
+      ("N" "exec-terminal neofetch")
+      ("i" "exec-terminal htop")
+      ("r" "exec-terminal ranger")
+      ;; ("m" "exec emacsclient -c -e '(unread-mail)'")
+      ;; ("r" "exec redshift")
+      ;; ("R" "exec killall redshift")
+      ("x" "app-menu")
+      ("s" "sys-menu"))
+    k))
+
+(define-key *root-map* (kbd "x") '*launch-map*)
 
 ;; swapping defaults
 (undefine-key *root-map* (kbd "s"))
@@ -78,7 +107,11 @@
   ("\"" "global-windowlist")
   ("r" "remove")
   ("R" "iresize"))
+;; END Window Manipulation
 
+;;;;;;;;;;;;;;;;;;;;;;;
+;; Window Navigation ;;
+;;;;;;;;;;;;;;;;;;;;;;;
 ;; duplicating defaults
 (define-key *root-map* (kbd "q") "only")
 
@@ -99,6 +132,12 @@
   (")" "exchange-direction right")
   ;; misc window management
   ("P" "pull-from-windowlist"))
+;; END Window Navigation
+
+;; bin menu
+(define-key *root-map* (kbd "space") "run-shell-command")
+;; clipboard
+(define-key *root-map* (kbd "C-y") "show-clipboard-history")
 
 ;; some control commands
 (def-keys *top-map*
@@ -113,25 +152,3 @@
   ("XF86AudioPrev" "run-shell-command mpc prev")
   ("XF86AudioStop" "run-shell-command mpc stop"))
 
-;; launch mode
-(defparameter *launch-map* 
-  (let ((k (make-sparse-keymap)))
-    (def-keys k
-      ("b" "exec qutebrowser")
-      ("d" "exec zathura")
-      ("f" "exec firefox")
-      ("F" "exec firefox --private-window")
-      ("m" "exec-terminal ncmpcpp")
-      ("M" "exec thunderbird")
-      ("n" "exec-terminal newsboat")
-      ("N" "exec-terminal neofetch")
-      ("i" "exec-terminal htop")
-      ("r" "exec-terminal ranger")
-      ;; ("m" "exec emacsclient -c -e '(unread-mail)'")
-      ;; ("r" "exec redshift")
-      ;; ("R" "exec killall redshift")
-      ("x" "app-menu")
-      ("s" "sys-menu"))
-    k))
-
-(define-key *root-map* (kbd "x") '*launch-map*)
