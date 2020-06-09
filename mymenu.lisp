@@ -53,15 +53,3 @@
   (("Greek" nil (greek))
    ("English" nil (english))
    ("German" nil (german))))
-
-;;; TODO: make this useful
-;; (defparameter *bin-menu*
-;;   (with-open-file (file "~/.stumpwm.d/bin.lisp")
-;;     (mapcar #'pathname-name (read file))))
-
-;; (defun write-bin (&optional (filename "bin.lisp"))
-;;   "Fetch all programs in /usr/bin/ and wite them as a list to FILENAME."
-;;   (with-open-file (file filename :direction :output :if-exists :overwrite :if-does-not-exist :create)
-;;     (let ((programs (directory "/usr/bin/*")))
-;;       (print programs file)
-;;       (format nil "Wrote programs to ~a." filename))))
