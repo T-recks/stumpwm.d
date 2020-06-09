@@ -48,18 +48,15 @@
         ))
 
 ;; Utility Files
-(safe-load "~/acc.lisp")
-(safe-load "~/Study/units.lisp")
-(safe-load "~/Code/lisp/notes.lisp")
+(restarts-load "~/acc.lisp")
+(restarts-load "~/Study/units.lisp")
+(restarts-load "~/Code/lisp/notes.lisp")
 
 ;; Prefix Key
 (set-prefix-key (kbd "C-z"))
 
 ;; Run-or-raise
 ;; TODO: make this concise.
-;; (defcommand emacs-connect () ()
-;;   "Identical to emacs function except it runs emacsclient -c"
-;;   (run-or-raise "emacsclient -c" '(:class "Emacs")))
 (defcommand raise-qutebrowser () ()
   (run-or-raise "qutebrowser" '(:class "qutebrowser")))
 (defcommand raise-firefox () ()
