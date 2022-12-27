@@ -55,6 +55,8 @@
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Window Creation ;;
 ;;;;;;;;;;;;;;;;;;;;;
+(load-conf-file "windows.lisp")
+
 (defparameter *window-specifications-list*
   '((emacs "emacs" (:class "Emacs"))
     (firefox "firefox" (:class "firefox"))
@@ -66,14 +68,6 @@
 
 (mapc (lambda (spec) (apply #'register-window-specification spec))
       *window-specifications-list*)
-
-(def-quick-access-keys 
-  '(("e" "emacs")
-    ("f" "firefox")
-    ("d" "zathura")
-    ("b" "qutebrowser")
-    ("t" "tor")
-    ("o" "libreoffice")))
 
 ;; launch mode
 (defparameter *launch-map* 
@@ -92,6 +86,14 @@
       ("x" "app-menu")
       ("s" "sys-menu"))
     k))
+
+(def-quick-access-keys 
+  '(("e" "emacs")
+    ("f" "firefox")
+    ("d" "zathura")
+    ("b" "qutebrowser")
+    ("t" "tor")
+    ("o" "libreoffice")))
 
 (define-key *root-map* (kbd "x") '*launch-map*)
 
