@@ -79,10 +79,20 @@
           (run-shell-command "xrandr --output VGA1 --off")
           (refresh-heads)
           (run-shell-command "~/.fehbg"))
-        (progn
-          (run-shell-command "xrandr --output VGA1 --left-of LVDS1 --auto")
-          (refresh-heads)
-          (run-shell-command "~/.fehbg")))))
+        (toggle-menu)
+        )))
+
+(defcommand toggle-heads-left () ()
+  (progn
+    (run-shell-command "xrandr --output VGA1 --left-of LVDS1 --auto")
+    (refresh-heads)
+    (run-shell-command "~/.fehbg")))
+
+(defcommand toggle-heads-right () ()
+  (progn
+    (run-shell-command "xrandr --output VGA1 --right-of LVDS1 --auto")
+    (refresh-heads)
+    (run-shell-command "~/.fehbg")))
 
 (defcommand colon1 (&optional (initial "")) (:rest)
   (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
