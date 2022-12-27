@@ -42,6 +42,10 @@
    ("Tools"
     ("VirtualBox" "VirtualBox"))))
 
+(defmenu (toggle-menu *toggle-menu*)
+  (("left" nil (toggle-heads-left))
+   ("right" nil (toggle-heads-right))))
+
 (defmenu (sys-menu *sys-menu*)
   (("Toggle Heads" nil (toggle-heads))
    ("Shutdown" "shutdown now")
