@@ -17,6 +17,11 @@
 (defun load-conf-file (filename)
   (restarts-load (conf-file filename)))
 
+;; Prefix Key
+;; Set this early in case later commands fail but stumpwm still launches,
+;; Then my Ctrl-z muscle memory will not be frustrated by Ctrl-t default...
+(set-prefix-key (kbd "C-z"))
+
 ;; Fonts
 (set-font "-windows-dina-medium-r-normal--13-100-96-96-c-80-iso8859-1")
 
@@ -51,9 +56,6 @@
 (restarts-load "~/acc.lisp")
 (restarts-load "~/Study/units.lisp")
 (restarts-load "~/Code/lisp/notes.lisp")
-
-;; Prefix Key
-(set-prefix-key (kbd "C-z"))
 
 ;; Run-or-raise
 ;; TODO: make this concise.
@@ -110,3 +112,9 @@
   (message "~A" (run-shell-command "mpc --format \"[[%artist% - ]%title%]\"| head -1" T)))
 
 (setf *stumpwm-initialized?* t)
+
+;; Doing this last because it tends to be the most brittle part of this config.
+;; If this last line fails but everything else succeeds, we might be lucky enough
+;; to launch into a stumpwm xsession where everything else in this config is functional,
+;; and can debug from there.
+(load-conf-file "swank-setup.lisp")
