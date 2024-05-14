@@ -54,6 +54,6 @@
    ("Kill Xorg" "pkill x")))
 
 (defmenu (lang-menu *lang-menu*)
-  (("Greek" nil (greek))
-   ("English" nil (english))
-   ("German" nil (german))))
+  (("German" nil (german))
+   ("Greek" nil (greek))
+   ("English" nil (english))))

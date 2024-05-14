@@ -12,9 +12,19 @@
      ,@forms
      (setf *current-lang* ,kbmap)))
 
+(def-lang-kbmap (german "de")
+  (xmodmap)
+  ;; the following functions swap C-z and C-y functionality
+  ;; for the sake of my muscle memory...
+  (set-prefix-key (kbd "C-y"))
+  (undefine-key *root-map* (kbd "C-y"))
+  (define-key *root-map* (kbd "C-z") "show-clipboard-history"))
+
 (def-lang-kbmap (english "us")
-  (xmodmap))
+  (xmodmap)
+  ;; ... and these reverse the swap
+  (undefine-key *root-map* (kbd "C-z"))
+  (define-key *root-map* (kbd "C-y") "show-clipboard-history")
+  (set-prefix-key (kbd "C-z")))
 
 (def-lang-kbmap (greek "gr"))
-
-(def-lang-kbmap (german "de"))
