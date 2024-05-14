@@ -91,9 +91,7 @@
   '(("e" "emacs")
     ("f" "firefox")
     ("d" "zathura")
-    ("b" "qutebrowser")
-    ("t" "tor")
-    ("o" "libreoffice")))
+    ("b" "qutebrowser")))
 
 (define-key *root-map* (kbd "x") '*launch-map*)
 

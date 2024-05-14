@@ -65,10 +65,6 @@
   (run-or-raise "firefox" '(:class "firefox")))
 (defcommand raise-zathura () ()
   (run-or-raise "zathura" '(:class "Zathura")))
-(defcommand raise-tor () ()
-  (run-or-raise "tor-browser" '(:class "Tor Browser")))
-(defcommand raise-calc () ()
-  (run-or-raise "libreoffice" '(:class "libreoffice-calc")))
 
 ;; Message Padding
 (setf *message-window-padding* 25)
